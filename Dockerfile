@@ -5,9 +5,10 @@ MAINTAINER Mahesh Acharya <m.acharya@onehippo.com>
 # Set environment variables
 ENV PATH /opt/tomcat/bin:$PATH
 ENV TOMCAT_VERSION 8.0.37
-ENV HIPPO_FILE gameday-project-0.1.0-SNAPSHOT-distribution.zip
-ENV HIPPO_FOLDER gameday-project-0.1.0-SNAPSHOT-distribution
-ENV HIPPO_URL https://s3.amazonaws.com/hippo-connect/gameday-project-0.1.0-SNAPSHOT-distribution.zip
+ENV HIPPO_PROJECT_RELEASE myhippoproject-1.0.0-distribution
+ENV HIPPO_FILE ${HIPPO_PROJECT_RELEASE}.tar.gz
+ENV HIPPO_FOLDER ${HIPPO_PROJECT_RELEASE}
+ENV HIPPO_URL https://s3-us-west-2.amazonaws.com/hippo-demo/myhippoproject-docker-deployment-demo/${HIPPO_PROJECT_RELEASE}.tar.gz
 
 #Tomcat Configurations for Hippo CMS
 ENV HIPPO_TOMCAT_CONFIG apache-tomcat-${TOMCAT_VERSION}-hippo-simple-config
@@ -57,8 +58,9 @@ ENV PATH $PATH:$CATALINA_HOME/bin
 
 # Install Hippo CMS, retrieving the GoGreen demonstration from the $HIPPO_URL and putting it under $HIPPO_FOLDER
 RUN curl -L $HIPPO_URL -o $HIPPO_FILE
-RUN unzip $HIPPO_FILE -d $HIPPO_FOLDER
-#RUN tar -xzf $HIPPO_FILE
+#RUN unzip $HIPPO_FILE -d $HIPPO_FOLDER
+RUN mkdir $HIPPO_FOLDER
+RUN tar xzvf $HIPPO_FILE -C $HIPPO_FOLDER 
 RUN cp -r $HIPPO_FOLDER/* /opt/tomcat/
 RUN chmod 700 /opt/tomcat/* -R
 
